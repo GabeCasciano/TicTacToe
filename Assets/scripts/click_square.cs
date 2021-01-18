@@ -8,21 +8,10 @@ public class click_square : MonoBehaviour
     public int location = 0;
     private int clickedPlayer = 0;
     private int activePlayer = 0;
+    private bool playerEnabled = false;
     public GameObject player1;
     public GameObject player2;
     //public game_controller = GameObject.Find("Game_controller").GetComponent<game_controller>()
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public int getPlayerClicked(){
         return clickedPlayer;
@@ -46,23 +35,33 @@ public class click_square : MonoBehaviour
         return activePlayer;
     }
 
-    private void OnMouseDown() {
+    public void setEnabled(bool en){
+        playerEnabled = en;
+    }
 
-        if(!isClicked()){
-            clickedPlayer = activePlayer;
-
-            //Debug.Log("Clicked Square " + location);
-            
-            GameObject new_square;
-            if(clickedPlayer == 1){
-                new_square = Instantiate(player1, transform);
-            }
-            else if (clickedPlayer == 2){
-                new_square = Instantiate(player2, transform);
-            }
+    public void setSquare(){
+        GameObject new_square;
+        if(clickedPlayer == 1){
+            new_square = Instantiate(player1, transform);
         }
-        else{
-            Debug.Log("Try Again");
+        else if (clickedPlayer == 2){
+            new_square = Instantiate(player2, transform);
+        }
+    }
+
+    public bool doClick(int player){
+        if(!isClicked()){
+            clickedPlayer = player;
+            setSquare();
+            return true;
+        }
+        Debug.Log("Ty Again");
+        return false;
+    }
+
+    private void OnMouseDown() {
+        if(enabled){
+            doClick(activePlayer);
         }
     }
 
