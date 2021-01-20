@@ -1,4 +1,4 @@
 *.sln
 *.csproj
 .vscode
-/Library/Artifacts/*
+
