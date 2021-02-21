@@ -1,0 +1,7 @@
+ToDo:
+
+1. nicer exitting and stuff so server and game stop hanging
+2. better UI, display who goes first, and the opponent and stuff like that
+3. offer rematch or exit to mainscreen
+4. exit anytime / give up
+5. document

@@ -31,11 +31,14 @@ public class TCPServer{
 
     public void broadcastToClients(string data){
         byte[] bytes = Encoding.ASCII.GetBytes(data);
-        if(bytes.Length < this.dataLength){
-            foreach(NetworkStream ns in this.netStreams){
+        if (bytes.Length < this.dataLength)
+        {
+            foreach (NetworkStream ns in this.netStreams)
+            {
                 ns.Write(bytes, 0, bytes.Length);
             }
         }
+
     }
 
     public string[] readFromClients(){
@@ -45,15 +48,19 @@ public class TCPServer{
         for(int i = 0; i < this.clients.Count; i++){
             bytes = new byte[this.dataLength];
             this.netStreams[i].Read(bytes, 0, bytes.Length);
-            data[i] = Encoding.ASCII.GetString(bytes);
+            data[i] = Encoding.ASCII.GetString(bytes).TrimEnd('\0');
         }
         return data;
     }
 
     public void sendToClient(int client, string data){
         byte[] bytes = Encoding.ASCII.GetBytes(data);
-        if(client < this.clients.Count && bytes.Length < this.dataLength){
-            this.netStreams[client].Write(bytes, 0, bytes.Length);
+        if (bytes.Length < this.dataLength)
+        {
+            if (client < this.clients.Count)
+            {
+                this.netStreams[client].Write(bytes, 0, bytes.Length);
+            }
         }
     }
 
@@ -61,7 +68,7 @@ public class TCPServer{
         byte[] bytes = new byte[this.dataLength];
         if(client < this.clients.Count){
             this.netStreams[client].Read(bytes, 0, bytes.Length);
-            return Encoding.ASCII.GetString(bytes);
+            return Encoding.ASCII.GetString(bytes).TrimEnd('\0');
         }
         return null;
     }
@@ -84,6 +91,23 @@ public class TCPServer{
         }
         this.clients = new List<TcpClient>();
         this.netStreams = new List<NetworkStream>();
+    }
+
+    public bool clientReady(int client){
+        if(client < this.clients.Count){
+            return this.netStreams[client].DataAvailable;
+        }
+        return false;
+    }
+
+    public int[] clientsReady(){
+        List<int> cli = new List<int>();
+        for(int i = 0; i < this.clients.Count; i++){
+            if(this.netStreams[i].DataAvailable){
+                cli.Add(i);
+            }
+        }
+        return cli.ToArray();
     }
 
 }

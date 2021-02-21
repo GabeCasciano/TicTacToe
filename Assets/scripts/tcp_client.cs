@@ -20,15 +20,15 @@ public class TCPClient{
 
     public void sendToServer(string data){
         byte[] bytes = Encoding.ASCII.GetBytes(data);
-        if(bytes.Length < this.dataLength){
+        if(bytes.Length < this.dataLength)
             this.netStream.Write(bytes, 0, bytes.Length);
-        }
+        
     }
 
     public string recieveFromServer(){
         byte[] bytes = new byte[this.dataLength];
         this.netStream.Read(bytes, 0, bytes.Length);
-        return Encoding.ASCII.GetString(bytes);
+        return Encoding.ASCII.GetString(bytes).TrimEnd('\0');
     }
 
     public void disconnectFromServer(){

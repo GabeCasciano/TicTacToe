@@ -5,7 +5,6 @@ using UnityEngine;
 public class click_square : MonoBehaviour
 {
 
-    public int location = 0;
     private int clickedPlayer = 0;
     private int activePlayer = 0;
     private bool playerEnabled = false;
@@ -19,10 +18,6 @@ public class click_square : MonoBehaviour
 
     public bool isClicked(){
         return clickedPlayer > 0;
-    }
-    
-    public int getLocation(){
-        return location;
     }
 
     public void setActivePlayer(int player){
@@ -49,8 +44,14 @@ public class click_square : MonoBehaviour
         }
     }
 
+    public void forceClick(int player)
+    {
+        clickedPlayer = player;
+        setSquare();
+    }
+
     public bool doClick(int player){
-        if(!isClicked()){
+        if(!isClicked() && playerEnabled){
             clickedPlayer = player;
             setSquare();
             return true;

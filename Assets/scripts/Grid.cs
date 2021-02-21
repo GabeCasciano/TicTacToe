@@ -42,6 +42,7 @@ public class Grid : MonoBehaviour
         if(grid[2] == grid[4] && grid[4] == grid[6]){
             return grid[4];
         }
+        counter++;
         return 0;
     }
 
@@ -49,19 +50,42 @@ public class Grid : MonoBehaviour
         return counter == 9 && checkForWin() == 0;
     }
 
+    public int getLastChange(){
+        for(int i = 0; i < 9; i++){
+            if(prev_grid[i] != grid[i]){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public bool hasChanged(){
-        return prev_grid.SequenceEqual(grid);
+        return !prev_grid.SequenceEqual(grid);
+    }
+
+    public void updatePrev()
+    {
+        grid.CopyTo(prev_grid, 0);
     }
 
     public void updateGrid(){
-        grid.CopyTo(prev_grid, 0);
         for(int i = 0; i < 9; i++){
             click_square current_square = (click_square)squares[i].GetComponent<click_square>();
             if(current_square.isClicked()){
                 grid[i] = current_square.getPlayerClicked();
             }
         }
-        counter++;
+        //counter++;
+    }
+
+    public bool setNetClick(int square, int player){
+        if(square < 9){
+            if(!squares[square].GetComponent<click_square>().isClicked()){
+                squares[square].GetComponent<click_square>().forceClick(player);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setEnabledPlayer(bool en){
